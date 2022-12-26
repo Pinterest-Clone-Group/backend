@@ -5,7 +5,8 @@ const development = {
     username: env.MYSQL_USERNAME,
     password: env.MYSQL_PASSWORD,
     database: env.MYSQL_DATABASE,
-    host: env.MYSQL_HOST,
+    host: env.DB_END_POINT,
+    port: process.env.DB_PORT,
     dialect: 'mysql',
 };
 const test = {
@@ -24,3 +25,7 @@ const production = {
 };
 
 module.exports = { development, production, test };
+
+// 1. npx sequelize db:drop --config ./src/config/config.js  
+// 2. npx sequelize db:create --config ./src/config/config.js
+// 3. npx sequelize db:migrate --config ./src/config/config.js --migrations-path ./src/migrations --models-path ./src/models
