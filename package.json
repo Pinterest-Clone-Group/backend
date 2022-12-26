@@ -4,31 +4,32 @@
     "description": "",
     "main": ".prettierrc.js",
     "scripts": {
-      "dev": "nodemon src/app.js",
-      "db:create": "npx sequelize db:create --config ./src/config/config.js",
-      "db:migrate": "npx sequelize db:migrate --config ./src/config/config.js --migrations-path ./src/migrations --models-path ./src/models",
-      "db:drop": "npx sequelize db:drop --config ./src/config/config.js"
+        "dev": "nodemon src/app.js",
+        "db:create": "npx sequelize db:create --config ./src/config/config.js",
+        "db:migrate": "npx sequelize db:migrate --config ./src/config/config.js --migrations-path ./src/migrations --models-path ./src/models",
+        "db:drop": "npx sequelize db:drop --config ./src/config/config.js"
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/hanghae10-w6-team5/backend.git"
+        "type": "git",
+        "url": "git+https://github.com/hanghae10-w6-team5/backend.git"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-      "url": "https://github.com/hanghae10-w6-team5/backend/issues"
+        "url": "https://github.com/hanghae10-w6-team5/backend/issues"
     },
     "homepage": "https://github.com/hanghae10-w6-team5/backend#readme",
     "dependencies": {
-      "cookie-parser": "^1.4.6",
-      "dotenv": "^16.0.3",
-      "express": "^4.18.2",
-      "mysql2": "^2.3.3",
-      "passport": "^0.6.0",
-      "sequelize": "^6.27.0"
+        "cookie-parser": "^1.4.6",
+        "dotenv": "^16.0.3",
+        "express": "^4.18.2",
+        "mysql2": "^2.3.3",
+        "passport": "^0.6.0",
+        "sequelize": "^6.27.0",
+        "winston": "^3.8.2"
     },
     "devDependencies": {
-      "nodemon": "^2.0.20",
-      "sequelize-cli": "^6.5.2"
+        "nodemon": "^2.0.20",
+        "sequelize-cli": "^6.5.2"
     }
-  }
+}
