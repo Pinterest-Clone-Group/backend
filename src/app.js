@@ -1,6 +1,10 @@
 const express = require('express');
 const routes = require('./routes/index.route');
 require('dotenv').config();
+const {
+    errorHandler,
+    errorLogger,
+} = require('./middlewares/error-handler.middleware');
 const cookieParser = require('cookie-parser');
 
 const app = express();
@@ -12,6 +16,9 @@ app.use(cookieParser());
 
 // api router
 app.use('/api', routes);
+
+// error handler
+app.use([errorHandler, errorLogger]);
 
 app.listen(PORT, () => {
     console.log(PORT, 'Server is running');
