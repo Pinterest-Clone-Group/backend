@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             this.hasMany(models.Comments, {
                 as: 'Comments',
-                foreignKey: 'postId',
+                foreignKey: 'pinId',
             });
         }
     }

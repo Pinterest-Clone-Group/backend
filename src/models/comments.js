@@ -11,7 +11,10 @@ module.exports = (sequelize, DataTypes) => {
             // define association here
             this.belongsTo(models.Users, { foreignKey: 'userId' });
             this.belongsTo(models.Pins, { foreignKey: 'pinId' });
-            Comments.hasMany(Comments, { as: 'Children', foreignKey: 'ParentId', useJunctionTable: false })
+            this.hasMany(models.CommentLikes, {
+                as: 'CommentLikes',
+                foreignKey: 'commentId',
+            });
         }
     }
     Comments.init(
@@ -44,14 +47,13 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 type: DataTypes.STRING,
             },
-            parentCommentid: {
+            like: {
                 allowNull: false,
                 type: DataTypes.INTEGER,
-                references: {
-                    model: 'Comments',
-                    key: 'commentId',
-                },
-                onDelete: 'cascade',
+            },
+            parentCommentId: {
+                allowNull: true,
+                type: DataTypes.INTEGER,
             },
             createdAt: {
                 allowNull: false,

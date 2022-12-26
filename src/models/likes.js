@@ -1,8 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
-
 module.exports = (sequelize, DataTypes) => {
-    class Users extends Model {
+    class Likes extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,48 +9,35 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            this.hasMany(models.Pins, {
-                as: 'Pins',
-                foreignKey: 'userId',
-            });
-            this.hasMany(models.Comments, {
-                as: 'Comments',
-                foreignKey: 'userId',
-            });
-            this.hasMany(models.CommentLikes, {
-                as: 'CommentLikes',
-                foreignKey: 'userId',
-            });
+            this.belongsTo(models.Users, { foreignKey: 'userId' });
+            this.belongsTo(models.Pins, { foreignKey: 'pinId' });
         }
     }
-    Users.init(
+    Likes.init(
         {
-            userId: {
+            likeId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: DataTypes.INTEGER,
             },
-            loginId: {
-                unique: true,
+            pinId: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
-                type: DataTypes.STRING,
+                references: {
+                    model: 'Pins',
+                    key: 'pinId',
+                },
+                onDelete: 'cascade',
             },
-            password: {
-                type: DataTypes.STRING,
+            userId: {
+                type: DataTypes.INTEGER,
                 allowNull: false,
-            },
-            image: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            name: {
-                type: DataTypes.STRING,
-                allowNull: false,
-            },
-            refreshtoken: {
-                type: DataTypes.STRING,
-                allowNull: true,
+                references: {
+                    model: 'Users',
+                    key: 'userId',
+                },
+                onDelete: 'cascade',
             },
             createdAt: {
                 allowNull: false,
@@ -66,8 +52,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            modelName: 'Users',
+            modelName: 'Likes',
         }
     );
-    return Users;
+    return Likes;
 };
