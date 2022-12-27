@@ -1,7 +1,7 @@
 'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Comments extends Model {
+    class CommentLike extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,25 +10,16 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             this.belongsTo(models.Users, { foreignKey: 'userId' });
-            this.belongsTo(models.Pins, { foreignKey: 'pinId' });
+            this.belongsTo(models.Comments, { foreignKey: 'commentId' });
         }
     }
-    Comments.init(
+    CommentLike.init(
         {
             commentId: {
                 allowNull: false,
                 autoIncrement: true,
                 primaryKey: true,
                 type: DataTypes.INTEGER,
-            },
-            pinId: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-                references: {
-                    model: 'Pins',
-                    key: 'pinId',
-                },
-                onDelete: 'cascade',
             },
             userId: {
                 type: DataTypes.INTEGER,
@@ -39,13 +30,14 @@ module.exports = (sequelize, DataTypes) => {
                 },
                 onDelete: 'cascade',
             },
-            comment: {
-                allowNull: false,
-                type: DataTypes.STRING,
-            },
-            parentCommentId: {
-                allowNull: true,
+            commentId: {
                 type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: 'Comments',
+                    key: 'commentId',
+                },
+                onDelete: 'cascade',
             },
             createdAt: {
                 allowNull: false,
@@ -60,8 +52,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            modelName: 'Comments',
+            modelName: 'CommentLike',
         }
     );
-    return Comments;
+    return CommentLike;
 };
