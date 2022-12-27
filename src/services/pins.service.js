@@ -7,12 +7,12 @@ class PinsService {
     }
 
     createPin = async (title, content, userId, image) => {
-        return await this.pinsRepository.createPin({
+        return await this.pinsRepository.createPin(
             title,
             content,
             userId,
-            image,
-        });
+            image
+        );
     };
 
     findAllPins = async () => {
@@ -33,7 +33,7 @@ class PinsService {
 
     findOnePin = async (pinId) => {
         const pin = await this.pinsRepository.findOnePin(pinId);
-        if (!pin) throw new Error('게시글이 존재하지않습니다.');
+        if (!pin) throw new Error('핀이 존재하지않습니다.');
 
         return {
             pinId: pin.pinId,
@@ -49,7 +49,7 @@ class PinsService {
 
     updatePin = async (pinId, title, content, userId, image) => {
         const pin = await this.pinsRepository.findOnePin(pinId);
-        if (!pin) throw new Error('게시글이 존재하지않습니다.');
+        if (!pin) throw new Error('핀이 존재하지않습니다.');
         if (pin.userId !== userId) throw new Error('권한이 없습니다.');
 
         await this.pinsRepository.updatePin(pinId, title, content, image);
@@ -58,7 +58,7 @@ class PinsService {
     deletePin = async (pinId, userId) => {
         const pin = await this.pinsRepository.findOnePin(pinId);
 
-        if (!pin) throw new Error('게시글이 존재하지않습니다.');
+        if (!pin) throw new Error('핀이 존재하지않습니다.');
         if (pin.userId !== userId) throw new Error('권한이 없습니다.');
 
         await this.pinsRepository.deletePin(pinId);

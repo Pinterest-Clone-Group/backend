@@ -1,17 +1,15 @@
-const { User } = require('../models');
+const { Users, Pins } = require('../models');
 const { Op } = require('sequelize');
 
 class PinsRepository {
-    constructor(pinsModel) {
-        this.pins = pinsModel;
-    }
+    createPin = async (title, content, userId, image) => {
+        console.log(title, content, userId, image);
 
-    createPin = async (data) => {
-        await this.pins.create({
-            userId: data.userId,
-            title: data.title,
-            content: data.content,
-            pinImg: data.image,
+        await Pins.create({
+            title,
+            content,
+            userId,
+            image,
         });
     };
 

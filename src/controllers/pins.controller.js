@@ -7,19 +7,14 @@ class PinsController {
 
     createPin = async (req, res) => {
         try {
-            const { title, content } = req.body;
-            const { userId } = res.locals;
-
-            let image = undefined;
-            if (req.file) {
-                image = req.file.location;
-            } else {
-                image = '';
-            }
-
+            const { title, content, image } = req.body;
+            const userId = 1;
+            // const { userId } = res.locals;
+            console.log(title, content, userId, image);
             await this.pinsService.createPin(title, content, userId, image);
             return res.status(201).json({ message: '핀이 생성되었습니다.' });
         } catch (error) {
+            console.log(error);
             return res.status(400).json({
                 Message: '핀 생성에 실패하였습니다.',
             });
@@ -31,6 +26,7 @@ class PinsController {
             const pins = await this.pinsService.findAllPins();
             res.status(200).json({ pins });
         } catch (error) {
+            console.log(error);
             res.status(400).json({
                 Message: '핀 조회에 실패하였습니다.',
             });
@@ -57,15 +53,8 @@ class PinsController {
     updatePin = async (req, res) => {
         try {
             const { pinId } = req.params;
-            const { title, content } = req.body;
+            const { title, content, image } = req.body;
             const { userId } = res.locals;
-            let image = undefined;
-
-            if (req.file) {
-                image = req.file.location;
-            } else if (req.body.image === 'null') {
-                image = '';
-            }
 
             await this.pinsService.updatePost(
                 pinId,
