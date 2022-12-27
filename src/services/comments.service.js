@@ -11,7 +11,11 @@ class CommentService {
     createComment = async(userId, pinId, comment, parentCommentId, like) => {
         if(parentCommentId === null) {
             const commentNum = await this.commentRepository.findCommentNum();
-            parentCommentId = commentNum.length + 1;
+            if(!commentNum){
+                parentCommentId = 0;
+            }else {
+                parentCommentId = commentNum.length + 1;
+            }
         }
         const createComment = await this.commentRepository.createComment(
             userId, pinId, comment, parentCommentId, like
