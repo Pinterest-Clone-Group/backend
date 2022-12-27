@@ -60,10 +60,16 @@ class CommentService {
     likeComment = async(userId, commentId) => {
         const findComment = await this.commentRepository.findComment(commentId);
         let like = findComment.like;
-        console.log(findComment);
-        console.log(like);
-        const likeComment = await this.commentRepository.likeComment(userId, commentId, like);
-        return likeComment;
+        const findLike = await this.commentRepository.findLike(userId, commentId);
+        if(findLike){
+            like -= 1;
+            const dellikeComment = await this.commentRepository.dellikeComment(userId, commentId, like);
+            return dellikeComment;
+        }else {
+            like += 1;
+            const likeComment = await this.commentRepository.likeComment(userId, commentId, like);
+            return likeComment;
+        }
     }
 }
 

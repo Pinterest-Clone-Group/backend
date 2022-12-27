@@ -84,7 +84,7 @@ class CommentRepository {
         return deleteComment;
     }
     
-    likeComment = async(userId, commentId, like) => {
+    findLike = async(userId, commentId) => {
         const existLike = await CommentLikes.findOne({
             where: {
                 [Op.and]: [
@@ -92,30 +92,31 @@ class CommentRepository {
                 ]
             }
         });
-        console.log(existLike);
-        if(existLike) {
-            like -= 1;
-            const dellikeComment = await CommentLikes.destroy({
-                where: {commentId, userId}
-            });
-            const likeUpdateComment = await Comments.update(
-                {like},
-                {   where: {commentId},
-                    attributes: ['like']
-            });
-            return 0;
-        }else {
-            like += 1;
-            const createLikeComment = await CommentLikes.create({
-                userId, commentId
-            });
-            const likeUpdateComment = await Comments.update(
-                {like},
-                {   where: {commentId},
-                    attributes: ['like']
-            });
-            return 1;
-        }
+        return existLike;
+    }
+
+    likeComment = async(userId, commentId, like) => {
+        const dellikeComment = await CommentLikes.destroy({
+            where: {commentId, userId}
+        });
+        const likeUpdateComment = await Comments.update(
+            {like},
+            {   where: {commentId},
+                attributes: ['like']
+        });
+        return 0;
+    }
+    
+    dellikeComment = async(userId, commentId, like) => {
+        const createLikeComment = await CommentLikes.create({
+            userId, commentId
+        });
+        const likeUpdateComment = await Comments.update(
+            {like},
+            {   where: {commentId},
+                attributes: ['like']
+        });
+        return 1;
     }
 }
 
