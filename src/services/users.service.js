@@ -44,6 +44,7 @@ class UsersService {
         // find a user from Users table using id
         const target_user = await this.usersRepository.findUserbyEmail(email);
         const hashed_pw = hash(password);
+        console.log(target_user)
 
         if (!target_user || target_user.password !== hashed_pw) {
             throw new ValidationError('Incorrect id or password', 401)
@@ -66,6 +67,7 @@ class UsersService {
 
         // construct a new object user_detail - follow# missing as of now
         const user_detail = {
+            userId: target_user.userId,
             name: target_user.name,
             image: target_user.image,
             username: target_user.username
