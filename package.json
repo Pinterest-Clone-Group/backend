@@ -24,9 +24,11 @@
         "cookie-parser": "^1.4.6",
         "dotenv": "^16.0.3",
         "express": "^4.18.2",
+        "jsonwebtoken": "^9.0.0",
         "mysql2": "^2.3.3",
         "passport": "^0.6.0",
-        "sequelize": "^6.27.0"
+        "sequelize": "^6.27.0",
+        "winston": "^3.8.2"
     },
     "devDependencies": {
         "nodemon": "^2.0.20",

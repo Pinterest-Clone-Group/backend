@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
                 primaryKey: true,
                 type: DataTypes.INTEGER,
             },
-            loginId: {
+            email: {
                 unique: true,
                 allowNull: false,
                 type: DataTypes.STRING,
@@ -43,9 +43,13 @@ module.exports = (sequelize, DataTypes) => {
             },
             image: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             name: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            username: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },

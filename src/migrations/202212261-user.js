@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      loginId: {
+      email: {
         unique: true,
         type: Sequelize.STRING,
         allowNull: false,
@@ -21,11 +21,15 @@ module.exports = {
       },
       image: {
         type: Sequelize.STRING, // url
-        allowNull: false,
+        allowNull: true,
       },
       name: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
+      },
+      username: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       refreshToken: {
         type:Sequelize.STRING,
