@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const pinsController = require('../controllers/pins.controller');
+const PinsController = require('../controllers/pins.controller');
+const pinsController = new PinsController();
 
 router.get('/:pinId', pinsController.findOnePin);
 
