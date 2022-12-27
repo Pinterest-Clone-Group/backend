@@ -42,7 +42,7 @@ class UsersService {
     // loginUser - find if there is a user with a given id
     loginUser = async (email, password) => {
         // find a user from Users table using id
-        const target_user = await this.usersRepository.findUser(email);
+        const target_user = await this.usersRepository.findUserbyEmail(email);
         const hashed_pw = hash(password);
 
         if (!target_user || target_user.password !== hashed_pw) {

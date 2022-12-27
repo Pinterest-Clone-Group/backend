@@ -15,6 +15,14 @@ class UsersRepository {
         })
         return target_user;
     }
+
+    // find a user based on id
+    findUserbyEmail = async (email) => {
+        const target_user = await this.#usersModel.findOne({
+            where: { email }
+        })
+        return target_user;
+    }
     
     // create a user
     createUser = async (email, name, password, username) => {
