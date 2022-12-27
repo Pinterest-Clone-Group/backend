@@ -35,17 +35,13 @@ class UsersController {
     loginUser = async (req, res, next) => {
         try {
             const { email, password } = req.body;
-            console.log(email)
 
             if (!email || !password) {
-                console.log('yes')
                 throw new InvalidParamsError();
             }
 
             // call loginUser in service - log in with id and pw
             const {accessToken, refreshToken} = await this.UsersService.loginUser(email, password);
-            console.log(accessToken)
-            console.log(refreshToken)
 
             // return authentication: token -> to pass the token to client
             return res.status(200).json({
