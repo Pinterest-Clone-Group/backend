@@ -66,6 +66,7 @@ class UsersService {
 
         // construct a new object user_detail - follow# missing as of now
         const user_detail = {
+            userId: target_user.userId,
             name: target_user.name,
             image: target_user.image,
             username: target_user.username
