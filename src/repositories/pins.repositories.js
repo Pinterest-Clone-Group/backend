@@ -14,11 +14,11 @@ class PinsRepository {
     };
 
     findAllPins = async () => {
-        return this.pins.findAll({
+        return Pins.findAll({
             include: [
                 {
-                    model: User,
-                    attributes: ['nickname'],
+                    model: Users,
+                    attributes: ['loginId'],
                 },
             ],
             order: [['updatedAt', 'desc']],
@@ -26,28 +26,25 @@ class PinsRepository {
     };
 
     findOnePin = async (pinId) => {
-        return this.pins.findOne({
+        return Pins.findOne({
             where: {
                 [Op.or]: [{ pinId }],
             },
             include: [
                 {
-                    model: User,
-                    attributes: ['nickname'],
+                    model: Users,
+                    attributes: ['loginId'],
                 },
             ],
         });
     };
 
     updatePin = async (pinId, title, content, image) => {
-        await this.pins.update(
-            { title, content, pinImg: image },
-            { where: { pinId } }
-        );
+        await Pins.update({ title, content, image }, { where: { pinId } });
     };
 
     deletePin = async (pinId) => {
-        await this.pins.destroy({
+        await Pins.destroy({
             where: { pinId },
         });
     };

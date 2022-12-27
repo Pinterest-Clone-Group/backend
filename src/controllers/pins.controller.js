@@ -54,24 +54,15 @@ class PinsController {
         try {
             const { pinId } = req.params;
             const { title, content, image } = req.body;
-            const { userId } = res.locals;
 
-            await this.pinsService.updatePost(
-                pinId,
-                title,
-                content,
-                userId,
-                image
-            );
+            await this.pinsService.updatePin(pinId, title, content, image);
             return res.status(201).json({ message: '핀이 수정되었습니다.' });
         } catch (error) {
+            console.log(error);
             if (error.message === '핀이 존재하지않습니다.') {
                 return res
                     .status(404)
                     .json({ Message: '존재하지않는 핀입니다.' });
-            }
-            if (error.message === '권한이 없습니다.') {
-                return res.status(404).json({ Message: '권한이 없습니다.' });
             }
             res.status(400).json({
                 Message: '핀 수정에 실패하였습니다.',
@@ -82,18 +73,14 @@ class PinsController {
     deletePin = async (req, res) => {
         try {
             const { pinId } = req.params;
-            const { userId } = res.locals;
 
-            await this.pinsService.deletePin(pinId, userId);
+            await this.pinsService.deletePin(pinId);
             return res.status(200).json({ message: '핀이 삭제되었습니다' });
         } catch (error) {
             if (error.message === '핀이 존재하지않습니다.') {
                 return res
                     .status(401)
                     .json({ errorMessage: '존재하지않는 핀입니다.' });
-            }
-            if (error.message === '권한이 없습니다.') {
-                return res.status(401).json({ Message: '권한이 없습니다.' });
             }
             res.status(400).json({
                 Message: '핀 삭제에 실패하였습니다.',
