@@ -5,15 +5,15 @@ const PinsController = require('../controllers/pins.controller');
 const pinsController = new PinsController();
 const authMiddleware = require('../middlewares/auth-middleware');
 
-router.post('/', pinsController.createPin);
+router.post('/', authMiddleware, pinsController.createPin);
 
-router.get('/', pinsController.findAllPins);
+router.get('/', authMiddleware, pinsController.findAllPins);
 
-router.get('/:pinId', pinsController.findOnePin);
+router.get('/:pinId', authMiddleware, pinsController.findOnePin);
 
-router.put('/:pinId', pinsController.updatePin);
+router.put('/:pinId', authMiddleware, pinsController.updatePin);
 
-router.delete('/:pinId', pinsController.deletePin);
+router.delete('/:pinId', authMiddleware, pinsController.deletePin);
 
 //즐겨찾기 기능
 router.put('/:pinId/likes', authMiddleware, pinsController.likePin);

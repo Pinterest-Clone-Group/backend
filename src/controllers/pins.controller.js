@@ -11,8 +11,7 @@ class PinsController {
     createPin = async (req, res) => {
         try {
             const { title, content, image } = req.body;
-            const userId = 1;
-            // const { userId } = res.locals;
+            const { userId } = res.locals;
             console.log(title, content, userId, image);
             await this.pinsService.createPin(title, content, userId, image);
             return res.status(201).json({ message: '핀이 생성되었습니다.' });
@@ -27,6 +26,7 @@ class PinsController {
     findAllPins = async (req, res) => {
         try {
             const pins = await this.pinsService.findAllPins();
+            
             res.status(200).json({ pins });
         } catch (error) {
             console.log(error);
@@ -42,12 +42,14 @@ class PinsController {
             const pin = await this.pinsService.findOnePin(pinId);
             res.status(200).json({ pin });
         } catch (error) {
+            console.log(error);
             if (error.message === '핀이 존재하지않습니다.') {
                 return res
                     .status(404)
                     .json({ Message: '존재하지않는 핀입니다.' });
             }
             res.status(400).json({
+
                 Message: '핀 상세 조회에 실패하였습니다.',
             });
         }
@@ -103,7 +105,6 @@ class PinsController {
                 res.status(200).json({ message: "핀 즐겨찾기 해제 성공" });
             }
         }catch(err){
-            err = InvalidParamsError("핀 즐겨찾기 실패");
             next(err);
         }
     }

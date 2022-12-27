@@ -50,15 +50,15 @@ class UsersService {
         }
 
         // Now, just passing the access token - subject to be fixed with a refresh token
-        const accessToken = createAccessToken(target_user.email, '1h');
+        const accessToken = createAccessToken(target_user.userId, '1h');
         const refreshToken = createRefreshToken('7D');
         return {accessToken, refreshToken};
     }
 
     // getUserDetail - find if there is a user with a given email
-    getUserDetail = async (email) => {
+    getUserDetail = async (userId) => {
         // find a user from Users table using email
-        const target_user = await this.usersRepository.findUser(email);
+        const target_user = await this.usersRepository.findUser(userId);
 
         if (!target_user) {
             throw new ValidationError;

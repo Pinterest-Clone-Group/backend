@@ -1,5 +1,8 @@
 const PinsRepository = require('../repositories/pins.repositories');
 const { Pins } = require('../models');
+const {
+    InvalidParamsError
+} = require('../exceptions/index.exception');
 
 class PinsService {
     constructor() {
@@ -17,11 +20,12 @@ class PinsService {
 
     findAllPins = async () => {
         const pins = await this.pinsRepository.findAllPins();
-
         return pins.map((allPins) => {
             return {
                 pinId: allPins.pinId,
                 userId: allPins.userId,
+                name: allPins['User.name'],
+                userImage: allPins['User.image'],
                 title: allPins.title,
                 image: allPins.image,
                 content: allPins.content,
@@ -38,6 +42,8 @@ class PinsService {
         return {
             pinId: pin.pinId,
             userId: pin.userId,
+            name: pin['User.name'],
+            userImage: pin['User.image'],
             title: pin.title,
             image: pin.image,
             content: pin.content,
@@ -61,6 +67,8 @@ class PinsService {
     };
 
     likePin = async(userId, pinId) => {
+        const existPin = await this.pinsRepository.findOnePin(pinId);
+        if(!existPin) throw new InvalidParamsError("존재하지 않는 핀입니다.");
         const findLike = await this.pinsRepository.findLike(userId, pinId);
         if(findLike){
             const delLikePin = await this.pinsRepository.delLikePin(userId, pinId);

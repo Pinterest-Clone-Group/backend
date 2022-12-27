@@ -18,24 +18,25 @@ class PinsRepository {
             include: [
                 {
                     model: Users,
-                    attributes: ['loginId'],
+                    attributes: ['name', 'image'],
                 },
             ],
+            raw: true,
             order: [['updatedAt', 'desc']],
         });
     };
 
     findOnePin = async (pinId) => {
+        console.log(pinId);
         return Pins.findOne({
-            where: {
-                [Op.or]: [{ pinId }],
-            },
+            where: { pinId },
             include: [
                 {
                     model: Users,
-                    attributes: ['loginId'],
+                    attributes: ['name', 'image'],  // 팔로워, 팔로우하기 추가?
                 },
             ],
+            raw: true,
         });
     };
 

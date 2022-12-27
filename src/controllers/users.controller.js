@@ -55,8 +55,7 @@ class UsersController {
     // API to get User Detail
     getUserDetail = async (req, res, next) => {
         try {
-            const userId = res.locals.user;
-
+            const { userId } = res.locals;
             if (!userId) {
                 throw new AuthenticationError(
                     'Unknown Error',
