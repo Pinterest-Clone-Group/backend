@@ -40,11 +40,11 @@ class UsersController {
             }
 
             // call loginUser in service - log in with id and pw
-            const token = await this.UsersService.loginUser(email, password);
+            const {accessToken, refreshToken} = await this.UsersService.loginUser(email, password);
 
             // return authentication: token -> to pass the token to client
             return res.status(200).json({
-                authentication: token,
+                accessToken, refreshToken
             });
         } catch (err) {
             // pass err to errorHandler middleware
@@ -83,7 +83,7 @@ class UsersController {
             if(!code) {
                 throw new error('카카오 로그인에 실패하였습니다.');
             }
-
+            
             const user = await this.UsersService.kakaoLogin(code);
             const accessToken = await this.UsersService.createAccessToken(
                 user.userId

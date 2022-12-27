@@ -2,7 +2,7 @@ const UsersRepository = require("../repositories/users.repository");
 const { Users } = require('../models');
 const { ValidationError } = require("../exceptions/index.exception");
 const { hash } = require('../util/auth-encryption.util');
-const { createToken } = require('../util/auth-jwtToken.util');
+const { createAccessToken, createRefreshToken } = require('../util/auth-jwtToken.util');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
 require('dotenv').config();
@@ -30,7 +30,7 @@ class UsersService {
 
         const hashed_pw = hash(password);
         const name = email.substring(0, email.indexOf("@"));
-        const username = name + Math.floor(Math.random() * 8999 + 1000).toString();
+        const username = name //+ Math.floor(Math.random() * 8999 + 1000).toString();
         
         const newUser = await this.usersRepository.createUser(email, name, hashed_pw, username);
 
@@ -50,8 +50,9 @@ class UsersService {
         }
 
         // Now, just passing the access token - subject to be fixed with a refresh token
-        const token = createToken(target_user.email, '1h');
-        return token;
+        const accessToken = createAccessToken(target_user.email, '1h');
+        const refreshToken = createRefreshToken('7D');
+        return {accessToken, refreshToken};
     }
 
     // getUserDetail - find if there is a user with a given email
@@ -78,7 +79,7 @@ class UsersService {
             data: { access_token: kakaoAccessToken },
         } = await axios('http://kauth.kakao.com/oauth/token', {
             params: {
-                grant_type: 'authorization_code',
+                grant_type: 'Authorization_code',
                 client_id: process.env.KAKAO_REST_API_KEY,
                 redirect_uri: process.env.KAKAO_REDIRECT_URI,
                 code: code,
@@ -125,7 +126,7 @@ class UsersService {
         let user = await this.usersRepository.findUser(email);
 
         if(!user) {
-            return (user = await this.usersRepository.signUp(name, email, picture));
+            return (user = await this.usersRepository.createUser(email, name, picture));
         }
         console.log(user);
         return user;

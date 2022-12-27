@@ -1,26 +1,8 @@
-const { Users, Pins, Comments, CommentLikes } = require('../models');
+const { Users, Comments, CommentLikes } = require('../models');
 const { Op } = require("sequelize");
 
 class CommentRepository {
-    
     createComment = async(userId, pinId, comment, parentCommentId, like) => {
-        // const loginId = "testUser";
-        // const password = "test";
-        // let image = "testImage.jpg";
-        // const name = "testUserName";
-        // const introduce = "testIntroduce";
-        // const website = "testWebSite";
-        // const createUser = await Users.create({
-        //     userId, loginId, password, image, name, introduce, website
-        // });
-        // console.log(createUser);
-        // const title = "testTitle";
-        // const content = "testContent";
-        // image = "testPinimage.jpg";
-        // const createPin = await Pins.create({
-        //     userId, title, content, image
-        // });
-        // console.log(createPin);
         const createComment = await Comments.create({
             pinId, userId, comment, like, parentCommentId
         });

@@ -1,4 +1,7 @@
 const CommentRepository = require('../repositories/comments.repository');
+const {
+    InvalidParamsError
+} = require('../exceptions/index.exception');
 
 class CommentService {
     constructor() {
@@ -36,9 +39,9 @@ class CommentService {
     updateComment = async(userId, commentId, comment) => {
         const existComment = await this.commentRepository.findComment(commentId);
         if(!existComment) {
-            throw new error('댓글을 찾을 수 없습니다.');
+            throw new InvalidParamsError('댓글을 찾을 수 없습니다.');
         }else if(existComment.userId !== userId) {
-            throw new error('권한이 없습니다.');
+            throw new InvalidParamsError('권한이 없습니다.');
         }
 
         const update = await this.commentRepository.updateComment(userId, commentId, comment);
@@ -48,9 +51,9 @@ class CommentService {
     deleteComment = async(userId, commentId) => {
         const existComment = await this.commentRepository.findComment(commentId);
         if(!existComment) {
-            throw new error('댓글을 찾을 수 없습니다.');
+            throw new InvalidParamsError('댓글을 찾을 수 없습니다.');
         }else if(existComment.userId !== userId) {
-            throw new error('권한이 없습니다.');
+            throw new InvalidParamsError('권한이 없습니다.');
         }
 
         const del = await this.commentRepository.deleteComment(commentId);

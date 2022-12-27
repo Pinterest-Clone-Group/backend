@@ -1,14 +1,15 @@
 const CommentService = require('../services/comments.service');
-
+const {
+    InvalidParamsError
+} = require('../exceptions/index.exception');
 class CommentController {
     constructor() {
         this.commentService = new CommentService();
     }
 
-    createComment = async(req, res) => {
+    createComment = async(req, res, next) => {
         try{
-            //const { userId } = res.locals;
-            const userId = 1;
+            const { userId } = res.locals;
             const { pinId } = req.params;
             let { comment, parentCommentId } = req.body;
             const like = 0;
@@ -16,56 +17,54 @@ class CommentController {
             await this.commentService.createComment(
                 userId, pinId, comment, parentCommentId, like
             );
-            return res.status(200).json({ message: "댓글 생성 완료" });
-        }catch(error) {
-            console.log(error);
-            return res.status(400).json({ errorMessage: "댓글 생성 실패" });
+            res.status(200).json({ message: "댓글 생성 완료" });
+        }catch(err) {
+            err = InvalidParamsError("댓글 생성 실패");
+            next(err);
         }
     }
 
-    getComment = async(req, res) => {
+    getComment = async(req, res, next) => {
         try{
             const { pinId } = req.params;
             const commentList = await this.commentService.findAllComment(pinId);
 
-            return res.status(200).json({ comment : commentList });
-        }catch(error) {
-            console.log(error);
-            return res.status(400).json({ errorMessage: "댓글 목록 조회 실패." });
+            res.status(200).json({ comment : commentList });
+        }catch(err) {
+            err = InvalidParamsError("댓글 목록 조회 실패");
+            next(err);
         }
     }
 
-    updateComment = async(req, res) => {
+    updateComment = async(req, res, next) => {
         try{
             const { commentId } = req.params;
             const { comment } = req.body;
-            //const { userId } = res.locals;
-            const userId = 1;
+            const { userId } = res.locals;
             await this.commentService.updateComment(userId, commentId, comment);
 
-            return res.status(200).json({ message: "댓글이 수정되었습니다." });
-        }catch(error) {
-            console.log(error);
-            return res.status(400).json({ errorMessage: "댓글 수정 실패" });
+            res.status(200).json({ message: "댓글이 수정되었습니다." });
+        }catch(err) {
+            err = InvalidParamsError("댓글 수정 실패");
+            next(err);
         }
     }
 
-    deleteComment = async(req, res) => {
+    deleteComment = async(req, res, next) => {
         try{
-            //const { userId } = res.locals;
-            const userId = 1;
+            const { userId } = res.locals;
             const { commentId } = req.params;
 
             await this.commentService.deleteComment(userId, commentId);
 
-            return res.status(200).json({ message: "댓글이 삭제되었습니다." });
-        }catch(error) {
-            console.log(error);
-            return res.status(400).json({ errorMessage: "댓글 삭제 실패" });
+            res.status(200).json({ message: "댓글이 삭제되었습니다." });
+        }catch(err) {
+            err = InvalidParamsError("댓글 삭제 실패");
+            next(err);
         }
     }
 
-    likeComment = async(req, res) => {
+    likeComment = async(req, res, next) => {
         try {
             //const { userId } = res.locals;
             const userId = 1;
@@ -73,13 +72,13 @@ class CommentController {
             console.log(commentId);
             const result = await this.commentService.likeComment(userId, commentId);
             if(result === 0){
-                return res.status(200).json({ message: "댓글 좋아요 취소 성공" });
+                res.status(200).json({ message: "댓글 좋아요 취소 성공" });
             }else { // result === 1
-                return res.status(200).json({ message: "댓글 좋아요 성공" });
+                res.status(200).json({ message: "댓글 좋아요 성공" });
             }
-        }catch(error) {
-            console.log(error);
-            return res.status(400).json({ errorMessage: "좋아요/좋아요 취소 실패" });
+        }catch(err) {
+            err = InvalidParamsError("좋아요/좋아요 취소 실패");
+            next(err);
         }
     }
 }

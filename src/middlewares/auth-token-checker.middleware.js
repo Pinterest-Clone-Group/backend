@@ -3,8 +3,8 @@ const { AuthenticationError } = require('../exceptions/index.exception.js');
 
 module.exports = async (req, res, next) => {
     try {
-        const authentication = req.get('authentication');
-        if (authentication) {
+        const authorization = req.headers['authorization'];
+        if (authorization) {
             throw new AuthenticationError('Already Logged in', 400);
         }
         next();
