@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
 
     try {
         const { userId } = jwt.verify(authorization, env.TOKEN_SECRETE_KEY);
-        res.locals.user = userId;
+        res.locals.userId = userId;
         next();
     } catch (err) {
         next(err);

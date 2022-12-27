@@ -9,11 +9,9 @@ class UsersRepository {
     }
 
     // find a user based on id
-    findUser = async (email) => {
+    findUser = async (userId) => {
         const target_user = await this.#usersModel.findOne({
-            where: {
-                email
-            }
+            where: { userId }
         })
         return target_user;
     }
