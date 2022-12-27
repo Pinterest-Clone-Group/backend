@@ -1,5 +1,6 @@
 const express = require('express');
 const routes = require('./routes/index');
+const cors = require('cors');
 require('dotenv').config();
 const {
     errorHandler,
@@ -11,6 +12,7 @@ const app = express();
 const PORT = process.env.PORT;
 
 // body parsing
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 

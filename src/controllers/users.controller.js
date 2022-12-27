@@ -3,6 +3,7 @@ const {
     InvalidParamsError,
     AuthenticationError,
 } = require('../exceptions/index.exception');
+const { access } = require('fs');
 
 class UsersController {
     constructor() {
@@ -44,7 +45,8 @@ class UsersController {
 
             // return authentication: token -> to pass the token to client
             return res.status(200).json({
-                accessToken, refreshToken
+                accessToken: "Bearer%" + accessToken,
+                refreshToken
             });
         } catch (err) {
             // pass err to errorHandler middleware
@@ -55,7 +57,7 @@ class UsersController {
     // API to get User Detail
     getUserDetail = async (req, res, next) => {
         try {
-            const { userId } = res.locals;
+            const { userId } = req.params;
             if (!userId) {
                 throw new AuthenticationError(
                     'Unknown Error',
