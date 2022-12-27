@@ -61,7 +61,6 @@ class UsersController {
     // API to get User Detail
     getUserDetail = async (req, res, next) => {
         try {
-            // const { userId } = res.locals;
             const { userId } = req.params;
             if (!userId) {
                 throw new AuthenticationError(
