@@ -9,19 +9,5 @@ const development = {
     port: process.env.DB_PORT,
     dialect: 'mysql',
 };
-const test = {
-    username: env.MYSQL_USERNAME,
-    password: env.MYSQL_PASSWORD,
-    database: env.MYSQL_DATABASE_TEST,
-    host: env.MYSQL_HOST,
-    dialect: 'mysql',
-};
-const production = {
-    username: 'root',
-    password: null,
-    database: 'database_production',
-    host: '127.0.0.1',
-    dialect: 'mysql',
-};
 
 module.exports = { development, production, test };
