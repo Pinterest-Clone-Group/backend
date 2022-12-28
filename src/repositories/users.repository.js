@@ -38,6 +38,17 @@ class UsersRepository {
         });
     }
 
+    // oauth create user
+    oauthCreateUser = async (email, name, username, image, category) => {
+        return await this.#usersModel.create({
+            email,
+            name,
+            username,
+            image,
+            category
+        });
+    }
+
     findCreatedPins = async (userId) => {
         const createdPinsByUser = await this.#pinsModel.findAll(
             {

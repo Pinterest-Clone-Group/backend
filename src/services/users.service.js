@@ -142,7 +142,7 @@ class UsersService {
         // OpenID Connect를 활성화 했을 경우, ID 토큰 포함
         const name = data.properties.nickname;
         const email = data.kakao_account.email; // 검수 필요
-        const picture = data.kakao_account.profile.thumbnail_image_url;
+        const image = data.kakao_account.profile.thumbnail_image_url;
         // {
         //     "aud": "${APP_KEY}",
         //     "sub": "${USER_ID}",
@@ -163,7 +163,11 @@ class UsersService {
         let user = await this.usersRepository.findUser(email);
 
         if(!user) {
-            return (user = await this.usersRepository.createUser(email, name, picture));
+            const username = name;
+            const category = "kakao";
+            return (user = await this.usersRepository.oauthCreateUser(
+                email, name, username, image, category
+                ));
         }
         console.log(user);
         return user;
