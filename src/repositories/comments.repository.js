@@ -3,10 +3,9 @@ const { Op } = require("sequelize");
 
 class CommentRepository {
     createComment = async(userId, pinId, comment, parentCommentId, like) => {
-        const createComment = await Comments.create({
+        await Comments.create({
             pinId, userId, comment, like, parentCommentId
         });
-        return createComment;
     }
 
     findComment = async(commentId) => {
@@ -41,7 +40,7 @@ class CommentRepository {
     }
 
     updateComment = async(userId, commentId, comment) => {
-        const updateComment = await Comments.update(
+        await Comments.update(
             { comment },
             { where: {
                 [Op.and]: [
@@ -50,11 +49,10 @@ class CommentRepository {
                 ]
             }}
         );
-        return updateComment;
     }
 
     deleteComment = async(commentId) => {
-        const deleteComment = await Comments.destroy(
+        await Comments.destroy(
             { where: {
                 [Op.or]: [
                     {commentId},
@@ -62,7 +60,6 @@ class CommentRepository {
                 ]
             }}
         );
-        return deleteComment;
     }
     
     findLike = async(userId, commentId) => {

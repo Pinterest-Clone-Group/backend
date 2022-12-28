@@ -9,16 +9,13 @@ class CommentService {
     }
 
     createComment = async(userId, pinId, comment, parentCommentId, like) => {
-        console.log(parentCommentId);
         if(parentCommentId === null) {
             const commentNum = await this.commentRepository.findCommentNum();
             parentCommentId = commentNum + 1;
         }
-        console.log(parentCommentId);
-        const createComment = await this.commentRepository.createComment(
+        await this.commentRepository.createComment(
             userId, pinId, comment, parentCommentId, like
         );
-        return createComment;
     }
 
     findAllComment = async(pinId) => {
@@ -47,8 +44,7 @@ class CommentService {
             throw new InvalidParamsError('권한이 없습니다.');
         }
 
-        const update = await this.commentRepository.updateComment(userId, commentId, comment);
-        return update;
+        await this.commentRepository.updateComment(userId, commentId, comment);
     };
 
     deleteComment = async(userId, commentId) => {
@@ -59,8 +55,7 @@ class CommentService {
             throw new InvalidParamsError('권한이 없습니다.');
         }
 
-        const del = await this.commentRepository.deleteComment(commentId);
-        return del;
+        await this.commentRepository.deleteComment(commentId);
     }
 
     likeComment = async(userId, commentId) => {
