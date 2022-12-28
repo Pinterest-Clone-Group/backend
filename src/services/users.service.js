@@ -27,6 +27,7 @@ class UsersService {
             throw new ValidationError;
         }
 
+        // 회원가입 시 findUserbyEmail 메서드 실행시 null 값이 나오는데도 불구하고 if 검출됨
         if (this.usersRepository.findUserbyEmail(email)) {
             throw new ValidationError('Already Signed Up');
         }

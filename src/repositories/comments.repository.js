@@ -77,7 +77,7 @@ class CommentRepository {
         return existLike;
     }
 
-    likeComment = async(userId, commentId, like) => {
+    dellikeComment = async(userId, commentId, like) => {
         const dellikeComment = await CommentLikes.destroy({
             where: {commentId, userId}
         });
@@ -89,7 +89,7 @@ class CommentRepository {
         return 0;
     }
     
-    dellikeComment = async(userId, commentId, like) => {
+    likeComment = async(userId, commentId, like) => {
         const createLikeComment = await CommentLikes.create({
             userId, commentId
         });

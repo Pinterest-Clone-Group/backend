@@ -29,6 +29,7 @@ class CommentService {
             return {
                 commentId: e.commentId,
                 pinId: e.pinId,
+                userId: e.userId,
                 name : e['User.name'],
                 image : e['User.image'],
                 comment: e.comment,
