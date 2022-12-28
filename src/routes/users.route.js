@@ -18,4 +18,6 @@ router.get('/:userId/pins', authMiddleware, usersController.getUserCreatedPins);
 
 router.get('/:userId/likes', authMiddleware, usersController.getUserLikedPins);
 
+
+
 module.exports = router;
