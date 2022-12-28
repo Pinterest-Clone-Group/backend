@@ -14,4 +14,8 @@ router.post('/login', authTokenChecker, usersController.loginUser);
 // to get a user detail page
 router.get('/:userId', authMiddleware, usersController.getUserDetail);
 
+router.get('/:userId/pins', authMiddleware, usersController.getUserCreatedPins);
+
+router.get('/:userId/likes', authMiddleware, usersController.getUserLikedPins);
+
 module.exports = router;

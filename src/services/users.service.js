@@ -1,5 +1,5 @@
 const UsersRepository = require("../repositories/users.repository");
-const { Users } = require('../models');
+const { Users, Pins, Likes } = require('../models');
 const { ValidationError } = require("../exceptions/index.exception");
 const { hash } = require('../util/auth-encryption.util');
 const { createAccessToken, createRefreshToken } = require('../util/auth-jwtToken.util');
@@ -10,7 +10,7 @@ require('dotenv').config();
 
 class UsersService {
     constructor() {
-        this.usersRepository = new UsersRepository(Users);
+        this.usersRepository = new UsersRepository(Users, Pins, Likes);
     }
 
     // signUpUser with a hashed password - create a user in Users table
@@ -19,13 +19,16 @@ class UsersService {
         const EMAIL_REGEX = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9-.]+$/;
         const PASSWORD_REGEX = /^(?=.*[a-zA-Z])(?=.*[0-9]).{6,20}$/;
 
-        console.log(email)
         if (!EMAIL_REGEX.test(email)) {
             throw new ValidationError;
         }
 
         if (!PASSWORD_REGEX.test(password)) {
             throw new ValidationError;
+        }
+
+        if (this.usersRepository.findUserbyEmail(email)) {
+            throw new ValidationError('Already Signed Up');
         }
 
         const hashed_pw = hash(password);
@@ -73,6 +76,37 @@ class UsersService {
         }
 
         return user_detail;
+    }
+
+    getUserCreatedPins = async (userId) => {
+        const user_created_pins = await this.usersRepository.findCreatedPins(userId);
+        return user_created_pins.map((pin) => {
+            return {
+                pinId: pin.pinId,
+                userId: pin['User.userId'],
+                title: pin.title,
+                image : pin.image,
+                content: pin.content,
+                createdAt: pin.createdAt,
+                updatedAt: pin.updatedAt
+            }
+        });
+    }
+
+    getUserLikedPins = async (userId) => {
+        const user_liked_pins = await this.usersRepository.findLikedPins(userId);
+        return user_liked_pins.map((pin) => {
+            return {
+                likeId: pin.likeId,
+                pinId: pin['Pin.pinId'],
+                userId: pin['User.userId'],
+                title: pin['Pin.title'],
+                image : pin['Pin.image'],
+                content: pin['Pin.content'],
+                createdAt: pin['Pin.createdAt'],
+                updatedAt: pin['Pin.updatedAt']
+            }
+        });
     }
 
     kakaoLogin = async(code) => {
