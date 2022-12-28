@@ -35,9 +35,8 @@ class CommentRepository {
     }
 
     findCommentNum = async() => {
-        const findAllComment = await Comments.findAll({
-            raw: true
-        });
+        const findAllComment = await Comments.max('commentId');
+        console.log(findAllComment);
         return findAllComment
     }
 
