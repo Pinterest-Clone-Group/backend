@@ -18,7 +18,6 @@ class UsersController {
             if (!email || !password) {
                 throw new InvalidParamsError();
             }
-
             // call signUpUser in service - create a user in Users table
             await this.UsersService.signUpUser(email, password);
 
@@ -45,7 +44,7 @@ class UsersController {
 
             // return authentication: token -> to pass the token to client
             return res.status(200).json({
-                accessToken: "Bearer%" + accessToken,
+                accessToken: "Bearer " + accessToken,
                 refreshToken
             });
         } catch (err) {
@@ -59,10 +58,7 @@ class UsersController {
         try {
             const { userId } = req.params;
             if (!userId) {
-                throw new AuthenticationError(
-                    'Unknown Error',
-                    400
-                );
+                throw new InvalidParamsError;
             }
             
             // call getUserDetail to get user information using userID
@@ -83,12 +79,9 @@ class UsersController {
         try {
             const { userId } = req.params;
             if (!userId) {
-                throw new AuthenticationError(
-                    'Unknown Error',
-                    400
-                );
+                throw new InvalidParamsError;
             }
-            
+
             // call getUserCreatedPins to get user craeted pins information using userID
             const user_liked_pins = await this.UsersService.getUserLikedPins(
                 userId
@@ -107,10 +100,7 @@ class UsersController {
         try {
             const { userId } = req.params;
             if (!userId) {
-                throw new AuthenticationError(
-                    'Unknown Error',
-                    400
-                );
+                throw new InvalidParamsError;
             }
             
             // call getUserCreatedPins to get user craeted pins information using userID
@@ -131,7 +121,7 @@ class UsersController {
         try{
             const { code } = req.query;
             if(!code) {
-                throw new error('카카오 로그인에 실패하였습니다.');
+                throw new InvalidParamsError('카카오 로그인에 실패하였습니다.');
             }
             
             const user = await this.UsersService.kakaoLogin(code);
@@ -150,7 +140,7 @@ class UsersController {
                 });
         }catch(error){
             console.log(error);
-            return res.status(400).json({ message: "알 수 없는 에러입니다."});
+            next(error);
         }
     }
 }
