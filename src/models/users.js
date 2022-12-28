@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
             },
             password: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: true,
             },
             image: {
                 type: DataTypes.STRING,
@@ -50,6 +50,10 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             username: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
+            category: {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
