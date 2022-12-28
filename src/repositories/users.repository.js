@@ -29,17 +29,19 @@ class UsersRepository {
     }
     
     // create a user
-    createUser = async (email, name, password, username) => {
+    createUser = async (email, name, password, username, category) => {
         return await this.#usersModel.create({
             email,
             name,
             password,
-            username
+            username,
+            category
         });
     }
 
     // oauth create user
     oauthCreateUser = async (email, name, username, image, category) => {
+        console.log(category)
         return await this.#usersModel.create({
             email,
             name,
