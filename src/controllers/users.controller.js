@@ -78,6 +78,55 @@ class UsersController {
         }
     };
 
+    // API to get user liked pins
+    getUserLikedPins = async (req, res, next) => {
+        try {
+            const { userId } = req.params;
+            if (!userId) {
+                throw new AuthenticationError(
+                    'Unknown Error',
+                    400
+                );
+            }
+            
+            // call getUserCreatedPins to get user craeted pins information using userID
+            const user_liked_pins = await this.UsersService.getUserLikedPins(
+                userId
+            );
+
+            return res.status(200).json({
+                data: user_liked_pins,
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+
+    // API to get user created pins
+    getUserCreatedPins = async (req, res, next) => {
+        try {
+            const { userId } = req.params;
+            if (!userId) {
+                throw new AuthenticationError(
+                    'Unknown Error',
+                    400
+                );
+            }
+            
+            // call getUserCreatedPins to get user craeted pins information using userID
+            const user_created_pins = await this.UsersService.getUserCreatedPins(
+                userId
+            );
+
+            return res.status(200).json({
+                data: user_created_pins,
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+    
+
     kakaoLogin = async(req, res) => {
         try{
             const { code } = req.query;
