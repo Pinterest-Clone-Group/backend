@@ -101,7 +101,7 @@ class UsersService {
             return {
                 likeId: pin.likeId,
                 pinId: pin['Pin.pinId'],
-                userId: pin['User.userId'],
+                userId: pin['Pin.User.userId'],
                 title: pin['Pin.title'],
                 image : pin['Pin.image'],
                 content: pin['Pin.content'],

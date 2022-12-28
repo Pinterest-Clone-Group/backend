@@ -72,16 +72,18 @@ class UsersRepository {
                 include: [
                     {
                         nested: true,
-                        model: this.#usersModel,
-                        as: 'User',
-                        attributes: ['userId']
-                    },
-                    {
-                        nested: true,
                         model: this.#pinsModel,
                         as: 'Pin',
-                        attributes: ['pinId', 'title', 'content', 'image', 'createdAt', 'updatedAt']
-                    }
+                        attributes: ['pinId', 'title', 'content', 'image', 'createdAt', 'updatedAt'],
+                        include: [
+                            {
+                                nested: true,
+                                model: this.#usersModel,
+                                as: 'User',
+                                attributes: ['userId']
+                            }
+                        ]
+                    },
                 ],
                 raw: true,
             }
