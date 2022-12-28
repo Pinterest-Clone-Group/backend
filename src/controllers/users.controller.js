@@ -45,7 +45,7 @@ class UsersController {
 
             // return authentication: token -> to pass the token to client
             return res.status(200).json({
-                accessToken: "Bearer%" + accessToken,
+                accessToken: "Bearer " + accessToken,
                 refreshToken
             });
         } catch (err) {

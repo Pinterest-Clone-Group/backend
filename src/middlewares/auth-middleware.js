@@ -8,7 +8,7 @@ const env = process.env;
 module.exports = (req, res, next) => {
     const authorization = req.headers['authorization'];
 
-    const [authType, authToken] = (authorization || "").split("%");
+    const [authType, authToken] = (authorization || "").split(" ");
 
     if (!authorization) {
         throw new AuthenticationError('Login Required for access.', 412);
