@@ -35,10 +35,10 @@ class UsersService {
 
         const hashed_pw = hash(password);
         const name = email.substring(0, email.indexOf("@"));
-        const username = name //+ Math.floor(Math.random() * 8999 + 1000).toString();
-        
-        const newUser = await this.usersRepository.createUser(email, name, hashed_pw, username);
+        const username = name;
+        const category = "email";
 
+        const newUser = await this.usersRepository.createUser(email, name, hashed_pw, username, category);
         if (!newUser) {
             throw new ValidationError;
         }

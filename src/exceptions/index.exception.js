@@ -22,7 +22,7 @@ class ValidationError extends Error {
 class AuthenticationError extends Error {
     constructor(message, status) {
         super(message);
-        this.status = status || 403;
+        this.status = status || 401;
         this.name = 'AuthenticationError';
         if (!message) this.message = 'Login Required to access';
     }

@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
         const authorization = req.headers['authorization'];
         
         if (authorization) {
-            throw new AuthenticationError('Already Logged in', 400);
+            throw new AuthenticationError('Already Logged in', 401);
         }
         next();
     } catch (err) {
