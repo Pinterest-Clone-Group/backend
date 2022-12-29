@@ -3,13 +3,14 @@ const {
     InvalidParamsError, AuthenticationError, ValidationError
 } = require('../exceptions/index.exception');
 const { use } = require('passport');
+const url = require('url');
 
 class PinsController {
     constructor() {
         this.pinsService = new PinsService();
     }
 
-    createPin = async (req, res) => {
+    createPin = async (req, res, next) => {
         try {
             const { title, content, image } = req.body;
 
@@ -24,7 +25,7 @@ class PinsController {
             }
             
             await this.pinsService.createPin(title, content, userId, image);
-            return res.status(201).json({
+            return res.status(200).json({
                 message: '핀이 생성되었습니다.'
             });
         } catch (error) {
@@ -32,7 +33,7 @@ class PinsController {
         }
     };
 
-    findAllPins = async (req, res) => {
+    findAllPins = async (req, res, next) => {
         try {
             const pins = await this.pinsService.findAllPins();
 
@@ -45,7 +46,7 @@ class PinsController {
         }
     };
 
-    findOnePin = async (req, res) => {
+    findOnePin = async (req, res, next) => {
         try {
             const { pinId } = req.params;
 
@@ -62,7 +63,7 @@ class PinsController {
         }
     };
 
-    updatePin = async (req, res) => {
+    updatePin = async (req, res, next) => {
         try {
             const { pinId } = req.params;
             const { title, content, image } = req.body;
@@ -82,7 +83,7 @@ class PinsController {
             }
 
             await this.pinsService.updatePin(pinId, title, content, image);
-            return res.status(201).json({
+            return res.status(200).json({
                 message: '핀이 수정되었습니다.'
             });
         } catch (error) {
@@ -90,7 +91,21 @@ class PinsController {
         }
     };
 
-    deletePin = async (req, res) => {
+    searchPin = async(req, res, next) => {
+        try{
+            const queryData = url.parse(req.url, true).query;
+            const { search } = queryData;
+
+            const result = await this.pinsService.searchPin(search);
+            res.status(200).json({
+                result
+            });
+        }catch(error){
+            next(error);
+        }
+    }
+
+    deletePin = async (req, res, next) => {
         try {
             const { pinId } = req.params;
 
@@ -132,8 +147,8 @@ class PinsController {
             }else{ // result === 0
                 res.status(200).json({ message: "핀 즐겨찾기 해제 성공" });
             }
-        }catch(err){
-            next(err);
+        }catch(error){
+            next(error);
         }
     }
 }
