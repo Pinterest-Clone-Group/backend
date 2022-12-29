@@ -93,6 +93,19 @@ class UsersRepository {
         return likedPinsByUser;
     }
 
+    modifyUserProfile = async (userId, name, username, image) => {
+        const modifiedUserProfile = await this.#usersModel.update(
+            {
+                name,
+                username,
+                image
+            },
+            { 
+                where: { userId }
+            }
+        );
+        return modifiedUserProfile;
+    }
 }
 
 module.exports = UsersRepository;
