@@ -50,6 +50,17 @@ class PinsRepository {
         });
     };
 
+    searchPin = async (search) => {
+        const searchPin = await Pins.findAll({
+            where: {
+                title: {
+                    [Op.substring]: search,
+                },
+            },
+        })
+        return searchPin;
+    }
+
     findLike = async(userId, pinId) => {
         const existLike = await Likes.findOne({
             where: {
