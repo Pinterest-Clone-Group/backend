@@ -16,44 +16,45 @@ class FollowRelationshipsService {
     }
 
     followUser = async (userId, actorId) => {
-        try {
-            const targetUser = this.usersRepository.findUser(userId);
-            if (!targetUser) {
-                throw new ValidationError('No Such User Exists');
-            }
-
-            const followed = this.followRelationshipsRepository.checkFollow(userId, actorId);
-            // await followservice -> followUser(userId, actorId)
-
-            if (followed) {
-                await this.followRelationshipsRepository.unFollow(userId, actorId);
-            } else {
-                await this.followRelationshipsRepository.addFollow(userId, actorId);
-            }
-            
-        } catch (err) {
-            next(err);
+        const targetUser = this.usersRepository.findUser(userId);
+        if (!targetUser) {
+            throw new ValidationError('No Such User Exists');
         }
+
+        if (userId === actorId) {
+            throw new AuthenticationError('Cannot Follow Self');
+        }
+
+        const followed = await this.followRelationshipsRepository.checkFollow(userId, actorId);
+        console.log(!followed)
+        // console.log(followed)
+        // await followservice -> followUser(userId, actorId)
+
+        if (!followed) {
+            await this.followRelationshipsRepository.addFollow(userId, actorId);
+        } else {
+            await this.followRelationshipsRepository.unFollow(userId, actorId);
+        }
+
+            
+
+            // if (followed) {
+            //     await this.followRelationshipsRepository.unFollow(userId, actorId);
+            // } else {
+            //     await this.followRelationshipsRepository.addFollow(userId, actorId);
+            // }
+        
     }
 
     getFollowers = async (userId) => {
-        try {
-            const targetUser = this.usersRepository.findUser(userId);
-            if (!targetUser) {
-                throw new ValidationError('No Such User Exists');
-            }
-
-            const followers = this.followRelationshipsRepository.getAllFollowers(userId);
-            const followings = this.followRelationshipsRepository.getAllFollowings(userId);
-            
-            return {
-                followers,
-                followings
-            }
-
-        } catch (err) {
-            next(err);
+        const targetUser = await this.usersRepository.findUser(userId);
+        if (!targetUser) {
+            throw new ValidationError('No Such User Exists');
         }
+
+        const followings = await this.followRelationshipsRepository.getAllFollowings(userId);
+        
+        return followings;
     }
     
 }

@@ -23,7 +23,6 @@ class FollowRelationshipsController {
                 throw new AuthenticationError;
             }
 
-            // await followservice -> followUser(userId, actorId)
             await this.FollowRelationshipsService.followUser(userId, actorId);
 
             res.status(201).json({

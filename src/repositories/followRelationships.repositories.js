@@ -1,12 +1,10 @@
-const { Op } = require("sequelize");
+const { sequelize } = require('../models');
 
 class FollowRelationshipsRepository {
     // instance variable of UsersRepository class
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields
-    #usersModel;
     #followRelationshipsModel;
-    constructor (UsersModel, FollowRelationshipsModel) {
-        this.#usersModel = UsersModel;
+    constructor (FollowRelationshipsModel) {
         this.#followRelationshipsModel = FollowRelationshipsModel;
     }
 
@@ -31,7 +29,7 @@ class FollowRelationshipsRepository {
         SELECT userId, name, image 
         FROM Users 
         INNER JOIN (
-            SELECT followingId AS myFollowingUserId FROM FollowRelationships WHERE follwerId =$followerId
+            SELECT followingId AS myFollowingUserId FROM FollowRelationships WHERE followerId =$followerId
             ) as followingData
         ON Users.userId = followingData.myFollowingUserId`;
 
@@ -43,17 +41,19 @@ class FollowRelationshipsRepository {
     }
 
     checkFollow = async (targetUserId, userId) => {
-        return this.#followRelationshipsModel.findOne({
+        const targetFollow = await this.#followRelationshipsModel.findOne({
             where: { 
-                followingId: targetUserId, 
+                followingId: Number(targetUserId), 
                 followerId: userId 
             },
         });
+        console.log(targetFollow)
+        return targetFollow;
     };
 
     addFollow = async (targetUserId, userId) => {
         await this.#followRelationshipsModel.create({
-                followingId: targetUserId, 
+                followingId: Number(targetUserId), 
                 followerId: userId 
         });
     };
@@ -61,7 +61,7 @@ class FollowRelationshipsRepository {
     unFollow = async (targetUserId, userId) => {
         await this.#followRelationshipsModel.destroy({
             where: { 
-                followingId: targetUserId, 
+                followingId: Number(targetUserId), 
                 followerId: userId
             },
         });
