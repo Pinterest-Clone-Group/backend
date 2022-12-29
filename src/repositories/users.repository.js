@@ -25,6 +25,7 @@ class UsersRepository {
         const target_user = await this.#usersModel.findOne({
             where: { email }
         })
+        console.log(target_user)
         return target_user;
     }
     
@@ -93,6 +94,19 @@ class UsersRepository {
         return likedPinsByUser;
     }
 
+    modifyUserProfile = async (userId, name, username, image) => {
+        const modifiedUserProfile = await this.#usersModel.update(
+            {
+                name,
+                username,
+                image
+            },
+            { 
+                where: { userId }
+            }
+        );
+        return modifiedUserProfile;
+    }
 }
 
 module.exports = UsersRepository;

@@ -1,10 +1,11 @@
 const UsersRepository = require("../repositories/users.repository");
 const { Users, Pins, Likes } = require('../models');
-const { ValidationError } = require("../exceptions/index.exception");
+const { ValidationError, AuthenticationError } = require("../exceptions/index.exception");
 const { hash } = require('../util/auth-encryption.util');
 const { createAccessToken, createRefreshToken } = require('../util/auth-jwtToken.util');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
+const { resolveSoa } = require("dns");
 require('dotenv').config();
 
 
@@ -109,6 +110,20 @@ class UsersService {
                 updatedAt: pin['Pin.updatedAt']
             }
         });
+    }
+
+    modifyUserProfile = async (userId, actorId, name, username, image) => {
+        const targetUserDetail = await this.usersRepository.findUser(userId);
+        
+        if (!targetUserDetail) {
+            throw new ValidationError('No Such User Exists');
+        }
+        
+        if (targetUserDetail.userId !== actorId) {
+            throw new AuthenticationError('Unauthorized Access');
+        }
+
+        await this.usersRepository.modifyUserProfile(userId, name, username, image);
     }
 
     kakaoLogin = async(code) => {

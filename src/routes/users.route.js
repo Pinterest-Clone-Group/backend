@@ -13,9 +13,11 @@ router.post('/login', authTokenChecker, usersController.loginUser);
 // use authMiddleware to check if the user is authenticated
 // to get a user detail page
 router.get('/:userId', authMiddleware, usersController.getUserDetail);
+router.put('/:userId', authMiddleware, usersController.modifyUserProfile);
 
 router.get('/:userId/pins', authMiddleware, usersController.getUserCreatedPins);
 
 router.get('/:userId/likes', authMiddleware, usersController.getUserLikedPins);
+
 
 module.exports = router;

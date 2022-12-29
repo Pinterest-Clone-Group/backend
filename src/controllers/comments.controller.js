@@ -18,7 +18,7 @@ class CommentController {
                 throw new AuthenticationError;
             }
 
-            if (!pinId || !comment || !parentCommentId) {
+            if (!pinId || !comment) {
                 throw new InvalidParamsError;
             }
 
