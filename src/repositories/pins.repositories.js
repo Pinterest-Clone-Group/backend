@@ -57,6 +57,13 @@ class PinsRepository {
                     [Op.substring]: search,
                 },
             },
+            include: [
+                {
+                    model: Users,
+                    attributes: ['name', 'image'],  // 팔로워, 팔로우하기 추가?
+                },
+            ],
+            raw: true,
         })
         return searchPin;
     }

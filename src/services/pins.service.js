@@ -20,17 +20,17 @@ class PinsService {
 
     findAllPins = async () => {
         const pins = await this.pinsRepository.findAllPins();
-        return pins.map((allPins) => {
+        return pins.map((pin) => {
             return {
-                pinId: allPins.pinId,
-                userId: allPins.userId,
-                name: allPins['User.name'],
-                userImage: allPins['User.image'],
-                title: allPins.title,
-                image: allPins.image,
-                content: allPins.content,
-                createdAt: formatDate(allPins.createdAt),
-                updatedAt: formatDate(allPins.updatedAt),
+                pinId: pin.pinId,
+                userId: pin.userId,
+                name: pin['User.name'],
+                userImage: pin['User.image'],
+                title: pin.title,
+                image: pin.image,
+                content: pin.content,
+                createdAt: formatDate(pin.createdAt),
+                updatedAt: formatDate(pin.updatedAt),
             };
         });
     };
@@ -68,7 +68,20 @@ class PinsService {
 
     searchPin = async (search) => {
         const result = await this.pinsRepository.searchPin(search);
-        return result;
+        return result.map((pin) => {
+            return {
+                pinId: pin.pinId,
+                userId: pin.userId,
+                name: pin['User.name'],
+                userImage: pin['User.image'],
+                title: pin.title,
+                image: pin.image,
+                content: pin.content,
+                createdAt: formatDate(pin.createdAt),
+                updatedAt: formatDate(pin.updatedAt),
+            };
+        });
+        
     }
 
     likePin = async(userId, pinId) => {
