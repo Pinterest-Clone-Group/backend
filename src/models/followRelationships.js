@@ -2,7 +2,7 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    class FollowerRelationships extends Model {
+    class FollowRelationships extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
@@ -10,19 +10,9 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             // define association here
-            // this.hasMany(models.Users, {
-            //     as: 'Users',
-            //     foreignKey: 'followerId',
-            //     sourceKey: 'userId'
-            // });
-            // this.hasMany(models.Users, {
-            //     as: 'Users',
-            //     foreignKey: 'followingId',
-            //     sourceKey: 'userId'
-            // });
         }
     }
-    FollowerRelationships.init(
+    FollowRelationships.init(
         {
             followId: {
                 allowNull: false,
@@ -51,8 +41,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         {
             sequelize,
-            modelName: 'FollowerRelationships',
+            modelName: 'FollowRelationships',
         }
     );
-    return FollowerRelationships;
+    return FollowRelationships;
 };

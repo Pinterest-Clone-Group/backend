@@ -24,6 +24,7 @@ class FollowRelationshipsController {
             }
 
             // await followservice -> followUser(userId, actorId)
+            await this.FollowRelationshipsService.followUser(userId, actorId);
 
             res.status(201).json({
                 message: "Follow Completed"
@@ -34,7 +35,7 @@ class FollowRelationshipsController {
         }
     }
 
-    getfollowers = async (req, res, next) => {
+    getFollowers = async (req, res, next) => {
         try {
             const { userId } = req.params;
             const { userId:actorId } = res.locals;
@@ -47,7 +48,7 @@ class FollowRelationshipsController {
                 throw new AuthenticationError;
             }
             
-            const followers = await this.FollowRelationshipsService.getfollowers(userId);
+            const followers = await this.FollowRelationshipsService.getFollowers(userId);
             
             res.status(200).json({
                 data: followers

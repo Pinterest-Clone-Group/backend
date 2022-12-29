@@ -25,6 +25,7 @@ class UsersRepository {
         const target_user = await this.#usersModel.findOne({
             where: { email }
         })
+        console.log(target_user)
         return target_user;
     }
     
