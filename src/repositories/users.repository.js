@@ -30,12 +30,25 @@ class UsersRepository {
     }
     
     // create a user
-    createUser = async (email, name, password, username) => {
+    createUser = async (email, name, password, username, category) => {
         return await this.#usersModel.create({
             email,
             name,
             password,
-            username
+            username,
+            category
+        });
+    }
+
+    // oauth create user
+    oauthCreateUser = async (email, name, username, image, category) => {
+        console.log(category)
+        return await this.#usersModel.create({
+            email,
+            name,
+            username,
+            image,
+            category
         });
     }
 
@@ -62,16 +75,18 @@ class UsersRepository {
                 include: [
                     {
                         nested: true,
-                        model: this.#usersModel,
-                        as: 'User',
-                        attributes: ['userId']
-                    },
-                    {
-                        nested: true,
                         model: this.#pinsModel,
                         as: 'Pin',
-                        attributes: ['pinId', 'title', 'content', 'image', 'createdAt', 'updatedAt']
-                    }
+                        attributes: ['pinId', 'title', 'content', 'image', 'createdAt', 'updatedAt'],
+                        include: [
+                            {
+                                nested: true,
+                                model: this.#usersModel,
+                                as: 'User',
+                                attributes: ['userId']
+                            }
+                        ]
+                    },
                 ],
                 raw: true,
             }
@@ -79,6 +94,19 @@ class UsersRepository {
         return likedPinsByUser;
     }
 
+    modifyUserProfile = async (userId, name, username, image) => {
+        const modifiedUserProfile = await this.#usersModel.update(
+            {
+                name,
+                username,
+                image
+            },
+            { 
+                where: { userId }
+            }
+        );
+        return modifiedUserProfile;
+    }
 }
 
 module.exports = UsersRepository;

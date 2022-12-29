@@ -1,10 +1,11 @@
 const UsersRepository = require("../repositories/users.repository");
 const { Users, Pins, Likes } = require('../models');
-const { ValidationError } = require("../exceptions/index.exception");
+const { ValidationError, AuthenticationError } = require("../exceptions/index.exception");
 const { hash } = require('../util/auth-encryption.util');
 const { createAccessToken, createRefreshToken } = require('../util/auth-jwtToken.util');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
+const { resolveSoa } = require("dns");
 require('dotenv').config();
 
 
@@ -27,16 +28,18 @@ class UsersService {
             throw new ValidationError;
         }
 
-        if (this.usersRepository.findUserbyEmail(email)) {
+        // 회원가입 시 findUserbyEmail 메서드 실행시 null 값이 나오는데도 불구하고 if 검출됨
+        const existEmail = await this.usersRepository.findUserbyEmail(email)
+        if (existEmail) {
             throw new ValidationError('Already Signed Up');
         }
 
         const hashed_pw = hash(password);
         const name = email.substring(0, email.indexOf("@"));
-        const username = name //+ Math.floor(Math.random() * 8999 + 1000).toString();
-        
-        const newUser = await this.usersRepository.createUser(email, name, hashed_pw, username);
+        const username = name;
+        const category = "email";
 
+        const newUser = await this.usersRepository.createUser(email, name, hashed_pw, username, category);
         if (!newUser) {
             throw new ValidationError;
         }
@@ -99,7 +102,7 @@ class UsersService {
             return {
                 likeId: pin.likeId,
                 pinId: pin['Pin.pinId'],
-                userId: pin['User.userId'],
+                userId: pin['Pin.User.userId'],
                 title: pin['Pin.title'],
                 image : pin['Pin.image'],
                 content: pin['Pin.content'],
@@ -107,6 +110,20 @@ class UsersService {
                 updatedAt: pin['Pin.updatedAt']
             }
         });
+    }
+
+    modifyUserProfile = async (userId, actorId, name, username, image) => {
+        const targetUserDetail = await this.usersRepository.findUser(userId);
+        
+        if (!targetUserDetail) {
+            throw new ValidationError('No Such User Exists');
+        }
+        
+        if (targetUserDetail.userId !== actorId) {
+            throw new AuthenticationError('Unauthorized Access');
+        }
+
+        await this.usersRepository.modifyUserProfile(userId, name, username, image);
     }
 
     kakaoLogin = async(code) => {
@@ -140,7 +157,7 @@ class UsersService {
         // OpenID Connect를 활성화 했을 경우, ID 토큰 포함
         const name = data.properties.nickname;
         const email = data.kakao_account.email; // 검수 필요
-        const picture = data.kakao_account.profile.thumbnail_image_url;
+        const image = data.kakao_account.profile.thumbnail_image_url;
         // {
         //     "aud": "${APP_KEY}",
         //     "sub": "${USER_ID}",
@@ -161,7 +178,11 @@ class UsersService {
         let user = await this.usersRepository.findUser(email);
 
         if(!user) {
-            return (user = await this.usersRepository.createUser(email, name, picture));
+            const username = name;
+            const category = "kakao";
+            return (user = await this.usersRepository.oauthCreateUser(
+                email, name, username, image, category
+                ));
         }
         console.log(user);
         return user;

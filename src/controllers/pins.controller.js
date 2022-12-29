@@ -1,95 +1,130 @@
 const PinsService = require('../services/pins.service');
 const {
-    InvalidParamsError
+    InvalidParamsError, AuthenticationError, ValidationError
 } = require('../exceptions/index.exception');
+const { use } = require('passport');
+const url = require('url');
 
 class PinsController {
     constructor() {
         this.pinsService = new PinsService();
     }
 
-    createPin = async (req, res) => {
+    createPin = async (req, res, next) => {
         try {
             const { title, content, image } = req.body;
+
+            if (!title || !content || !image) {
+                throw new InvalidParamsError;
+            }
+
             const { userId } = res.locals;
-            console.log(title, content, userId, image);
+
+            if (!userId) {
+                throw new AuthenticationError;
+            }
+            
             await this.pinsService.createPin(title, content, userId, image);
-            return res.status(201).json({ message: '핀이 생성되었습니다.' });
-        } catch (error) {
-            console.log(error);
-            return res.status(400).json({
-                Message: '핀 생성에 실패하였습니다.',
+            return res.status(200).json({
+                message: '핀이 생성되었습니다.'
             });
+        } catch (error) {
+            next(error);
         }
     };
 
-    findAllPins = async (req, res) => {
+    findAllPins = async (req, res, next) => {
         try {
             const pins = await this.pinsService.findAllPins();
-            
-            res.status(200).json({ pins });
+
+            res.status(200).json({
+                data: pins
+            });
         } catch (error) {
             console.log(error);
-            res.status(400).json({
-                Message: '핀 조회에 실패하였습니다.',
-            });
+            next(error);
         }
     };
 
-    findOnePin = async (req, res) => {
+    findOnePin = async (req, res, next) => {
         try {
             const { pinId } = req.params;
-            const pin = await this.pinsService.findOnePin(pinId);
-            res.status(200).json({ pin });
-        } catch (error) {
-            console.log(error);
-            if (error.message === '핀이 존재하지않습니다.') {
-                return res
-                    .status(404)
-                    .json({ Message: '존재하지않는 핀입니다.' });
-            }
-            res.status(400).json({
 
-                Message: '핀 상세 조회에 실패하였습니다.',
+            if (!pinId) {
+                throw new InvalidParamsError;
+            }
+            
+            const pin = await this.pinsService.findOnePin(pinId);
+            res.status(200).json({
+                data: pin
             });
+        } catch (error) {
+            next(error);
         }
     };
 
-    updatePin = async (req, res) => {
+    updatePin = async (req, res, next) => {
         try {
             const { pinId } = req.params;
             const { title, content, image } = req.body;
 
-            await this.pinsService.updatePin(pinId, title, content, image);
-            return res.status(201).json({ message: '핀이 수정되었습니다.' });
-        } catch (error) {
-            console.log(error);
-            if (error.message === '핀이 존재하지않습니다.') {
-                return res
-                    .status(404)
-                    .json({ Message: '존재하지않는 핀입니다.' });
+            if (!pinId) {
+                throw new InvalidParamsError;
             }
-            res.status(400).json({
-                Message: '핀 수정에 실패하였습니다.',
+
+            if (!title || !content || !image) {
+                throw new InvalidParamsError;
+            }
+
+            const { userId } = res.locals;
+
+            if (!userId) {
+                throw new AuthenticationError;
+            }
+
+            await this.pinsService.updatePin(pinId, title, content, image);
+            return res.status(200).json({
+                message: '핀이 수정되었습니다.'
             });
+        } catch (error) {
+            next(error);
         }
     };
 
-    deletePin = async (req, res) => {
+    searchPin = async(req, res, next) => {
+        try{
+            const queryData = url.parse(req.url, true).query;
+            const { search } = queryData;
+
+            const result = await this.pinsService.searchPin(search);
+            res.status(200).json({
+                result
+            });
+        }catch(error){
+            next(error);
+        }
+    }
+
+    deletePin = async (req, res, next) => {
         try {
             const { pinId } = req.params;
 
-            await this.pinsService.deletePin(pinId);
-            return res.status(200).json({ message: '핀이 삭제되었습니다' });
-        } catch (error) {
-            if (error.message === '핀이 존재하지않습니다.') {
-                return res
-                    .status(401)
-                    .json({ errorMessage: '존재하지않는 핀입니다.' });
+            if (!pinId) {
+                throw new InvalidParamsError;
             }
-            res.status(400).json({
-                Message: '핀 삭제에 실패하였습니다.',
+
+            const { userId } = res.locals;
+
+            if (!userId) {
+                throw new AuthenticationError;
+            }
+
+            await this.pinsService.deletePin(pinId);
+            return res.status(200).json({
+                message: '핀이 삭제되었습니다'
             });
+        } catch (error) {
+            next(error);
         }
     };
 
@@ -98,14 +133,22 @@ class PinsController {
             const { userId } = res.locals;
             const { pinId } = req.params;
 
+            if (!userId) {
+                throw new AuthenticationError;
+            }
+            
+            if (!pinId) {
+                throw new InvalidParamsError;
+            }
+
             const result = await this.pinsService.likePin(userId, pinId);
             if(result === 1){
                 res.status(200).json({ message: "핀 즐겨찾기 성공" });
             }else{ // result === 0
                 res.status(200).json({ message: "핀 즐겨찾기 해제 성공" });
             }
-        }catch(err){
-            next(err);
+        }catch(error){
+            next(error);
         }
     }
 }

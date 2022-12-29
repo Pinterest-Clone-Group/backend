@@ -20,12 +20,16 @@ module.exports = {
         onDelete: 'cascade',
       },
       title: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(40),
         allowNull: false,
       },
       content: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(500),
         allowNull: false,
+      },
+      link: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       image: {
         type: Sequelize.STRING,

@@ -66,6 +66,11 @@ class PinsService {
         await this.pinsRepository.deletePin(pinId);
     };
 
+    searchPin = async (search) => {
+        const result = await this.pinsRepository.searchPin(search);
+        return result;
+    }
+
     likePin = async(userId, pinId) => {
         const existPin = await this.pinsRepository.findOnePin(pinId);
         if(!existPin) throw new InvalidParamsError("존재하지 않는 핀입니다.");
@@ -81,7 +86,7 @@ class PinsService {
 }
 
 function formatDate(date) {
-    var d = new Date(date),
+    const d = new Date(date),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();

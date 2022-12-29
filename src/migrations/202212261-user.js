@@ -17,7 +17,7 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       image: {
         type: Sequelize.STRING, // url
@@ -31,8 +31,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      category: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       refreshToken: {
-        type:Sequelize.STRING,
+        type: Sequelize.STRING,
         allowNull: true,
       },
       createdAt: {
