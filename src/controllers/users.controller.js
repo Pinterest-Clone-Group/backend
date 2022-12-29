@@ -154,10 +154,11 @@ class UsersController {
             
             const {user, accessToken, refreshToken} = await this.UsersService.kakaoLogin(code);
             return res
-                .header({ accessToken, refreshToken })
                 .status(200)
                 .json({
-                    message: `${user.name}님의 로그인이 완료 되었습니다.`
+                    message: `${user.name}님의 로그인이 완료 되었습니다.`,
+                    accessToken: "Bearer " + accessToken,
+                    refreshToken
                 });
         }catch(error){
             console.log(error);
