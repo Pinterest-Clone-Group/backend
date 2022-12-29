@@ -7,7 +7,6 @@ const env = process.env;
 
 module.exports = (req, res, next) => {
     const authorization = req.headers['authorization'];
-    console.log(authorization)
 
     const [authType, authToken] = (authorization || "").split(" ");
 

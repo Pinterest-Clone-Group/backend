@@ -7,6 +7,9 @@ const authMiddleware = require('../middlewares/auth-middleware');
 
 router.post('/', authMiddleware, pinsController.createPin);
 
+//검색 기능
+router.get('/search', authMiddleware, pinsController.searchPin);
+
 router.get('/', authMiddleware, pinsController.findAllPins);
 
 router.get('/:pinId', authMiddleware, pinsController.findOnePin);
@@ -14,6 +17,7 @@ router.get('/:pinId', authMiddleware, pinsController.findOnePin);
 router.put('/:pinId', authMiddleware, pinsController.updatePin);
 
 router.delete('/:pinId', authMiddleware, pinsController.deletePin);
+
 
 //즐겨찾기 기능
 router.put('/:pinId/likes', authMiddleware, pinsController.likePin);

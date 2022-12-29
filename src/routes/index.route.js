@@ -1,11 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const pinRouter = require('./pins.route.js');
 const commentRouter = require('./comments.route.js');
 const userRouter = require('./users.route.js');
-const loginRouter = require('./login.route.js');
 
-router.use('/login', loginRouter);
-router.use('/pins', [commentRouter]);
+router.use('/pins', [pinRouter, commentRouter]);
 router.use('/users', [userRouter]);
 
 module.exports = router;
