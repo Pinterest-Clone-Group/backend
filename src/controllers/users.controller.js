@@ -116,6 +116,33 @@ class UsersController {
         }
     }
     
+    modifyUserProfile = async (req, res, next) => {
+        try {
+            const { userId } = req.params;
+            const { userId:actorId } = res.locals;
+            
+            if (!userId) {
+                throw new InvalidParamsError;
+            }
+
+            if (!actorId) {
+                throw new AuthenticationError;
+            }
+
+            const { name, username, image } = req.body;
+
+            await this.UsersService.modifyUserProfile(userId, actorId, name, username, image);
+
+            res.status(200).json({
+                message: "User Profile Modified"
+            })
+        } catch (err) {
+            next(err);
+        }
+        
+
+        
+    }
 
     kakaoLogin = async(req, res) => {
         try{
