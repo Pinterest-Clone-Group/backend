@@ -147,18 +147,12 @@ class UsersController {
     kakaoLogin = async(req, res, next) => {
         try{
             const { code } = req.query;
+
             if(!code) {
                 throw new InvalidParamsError('카카오 로그인에 실패하였습니다.');
             }
             
-            const user = await this.UsersService.kakaoLogin(code);
-            const accessToken = await this.UsersService.createAccessToken(
-                user.userId
-            );
-            const refreshToken = await this.UsersService.createRefreshToken(
-                user.userId
-            );
-            window.close();
+            const {user, accessToken, refreshToken} = await this.UsersService.kakaoLogin(code);
             return res
                 .header({ accessToken, refreshToken })
                 .status(200)
