@@ -144,7 +144,7 @@ class UsersController {
         
     }
 
-    kakaoLogin = async(req, res) => {
+    kakaoLogin = async(req, res, next) => {
         try{
             const { code } = req.query;
             if(!code) {
